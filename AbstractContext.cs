@@ -13,25 +13,22 @@ namespace Entitities
     {
         IMongoCollection<T> collection; 
 
-        public AbstractContext(IMongoDatabase database)
+        public AbstractContext()
         {
-            collection = database.GetCollection<T>(nameof(T));
+            GetDatabase();
         }
 
         private void GetDatabase()
         {
-            var client = new MongoClient("ConnectionString");
-            MongoServer server = client.GetServer();
-
-            database = server.GetDatabase("");
+            var client = new MongoClient(AppSettings.GetSettingValue("ConnectionStrings", "MongoDb"));
+            var database = client.GetDatabase(AppSettings.GetSettingValue("ConnectionStrings", "DatabaseName"));
+            collection = database.GetCollection<T>(typeof(T).Name);
         }
-        private void GetCollection()
+
+        public IMongoCollection<T> Collection()
         {
-            collection = database
-            .GetCollection<T>(typeof(T).Name);
+            return collection;
         }
-
-
 
         public Object Create(Object entity)
         {
@@ -39,19 +36,20 @@ namespace Entitities
             return (T)entity;
         }
 
-        public Task<bool> Delete(ObjectId objectId)
+        public bool Delete(ObjectId objectId)
         {
-            throw new NotImplementedException();
+            var result = collection.DeleteOne($"{{ _id: ObjectId('{objectId}') }}");
+            return result.DeletedCount == 1;
         }
 
-        public Task<T> Get(ObjectId objectId)
+        public T GetById(ObjectId objectId)
         {
-            throw new NotImplementedException();
+            return collection.Find($"{{ _id: ObjectId('{objectId}') }}").FirstOrDefault();
         }
 
-        public Task<IEnumerable<T>> Get()
+        public IEnumerable<T> Get()
         {
-            throw new NotImplementedException();
+            return collection.Find(_ => true).ToList();
         }
 
         public Task<bool> Update(ObjectId objectId, T entity)

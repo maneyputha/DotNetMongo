@@ -1,30 +1,24 @@
-﻿using Entitities.Interfaces;
-using Entitities.Models;
+﻿using Entitities.Models;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Entitities
 {
     public class DBContext
     {
-        private static DBContext dbContext;
+        private static DBContext context;
 
         public AbstractContext<Car> car ;
 
-        public DBContext(IMongoClient client, IConfiguration config)
+        public DBContext()
         {
-            if(DbContext == null)
+            if(context == null)
             {
-                var database = client.GetDatabase(config.GetConnectionString("DatabaseName"));
-                car = new AbstractContext<Car>(database);
+                car = new AbstractContext<Car>();
 
-                dbContext = this;
+                Context = this;
             }
         }
 
-        public static DBContext DbContext { get => dbContext; }
+        public static DBContext Context { get => context; set => context = value; }
     }
 }

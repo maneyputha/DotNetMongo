@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,14 +9,16 @@ namespace Entitities.Interfaces
 {
     public interface IBaseContext<T>
     {
+        // Collection
+        IMongoCollection<T> Collection();
         //Create
         Object Create(Object entity);
         // Read
-        Task<T> Get(ObjectId objectId);
-        Task<IEnumerable<T>> Get();
+        T GetById(ObjectId objectId);
+        IEnumerable<T> Get();
         // Update
         Task<bool> Update(ObjectId objectId, T entity);
         // Delete
-        Task<bool> Delete(ObjectId objectId);
+        bool Delete(ObjectId objectId);
     }
 }
