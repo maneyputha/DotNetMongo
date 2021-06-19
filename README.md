@@ -128,5 +128,5 @@ Frame work also support linq style custom queries.
 Car c1 = (Car)DBContext.Context.car.Collection().Find(x => x.Id == c.Id).Single();
 ```
 
-## Enhancements 
+## Known Issues 
 Project does not support the Database first and the lazy loading architecture.
