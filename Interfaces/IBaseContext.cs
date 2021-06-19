@@ -14,10 +14,10 @@ namespace Entitities.Interfaces
         //Create
         Object Create(Object entity);
         // Read
-        T GetById(ObjectId objectId);
+        T Get(ObjectId objectId);
         IEnumerable<T> Get();
         // Update
-        Task<bool> Update(ObjectId objectId, T entity);
+        T Update(ObjectId objectId, T entity);
         // Delete
         bool Delete(ObjectId objectId);
     }
