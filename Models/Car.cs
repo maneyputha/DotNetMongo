@@ -11,7 +11,7 @@ namespace Entitities.Models
     /// </summary>
     public class Car
     {
-        //ObjectId - (of type - shared key)
+        //ObjectId - (of type - Bson Object Id)
         public ObjectId Id { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }

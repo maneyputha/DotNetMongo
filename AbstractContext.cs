@@ -118,7 +118,7 @@ namespace Entitities
         ///    <param>
         ///    objectId (ObjectId) - Accepts the specific MongoDB ObjectId. 
         ///    entity ((T)Model) - Object of type model that needs to be updated.
-        ///    (requires the id(shared key) in the object as well.
+        ///    (requires the id(ObjectId) in the object as well.
         ///    </param>
         ///    <returns>
         ///    Returns a collection object (updated) of type Model.
