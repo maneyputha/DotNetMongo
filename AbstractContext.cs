@@ -13,27 +13,17 @@ namespace Entitities
     ///    </typeparam>
     ///    Created By - Manendra Ranathunga
     ///    Created Date - 15.06.2021
+    ///    Updated By - Manendra Ranathunga
+    ///    Updated Date - 20.06.2021
     /// </summary>
     public class AbstractContext<T>: IBaseContext<T> where T : class
     {
-        IMongoCollection<T> collection; 
+        IMongoCollection<T> collection;
+        IMongoDatabase database;
 
         public AbstractContext()
         {
             GetDatabase();
-        }
-
-        /// <summary>
-        ///    Loads the database. 
-        ///    Uses the connection string values from the appsetting.json
-        ///    Created By - Manendra Ranathunga/ Shehan Wilfred
-        ///    Created Date - 18.06.2021
-        /// </summary>
-        private void GetDatabase() 
-        {
-            var client = new MongoClient(AppSettings.GetSettingValue("ConnectionStrings", "MongoDb"));
-            var database = client.GetDatabase(AppSettings.GetSettingValue("ConnectionStrings", "DatabaseName"));
-            collection = database.GetCollection<T>(typeof(T).Name);
         }
 
         /// <summary>
@@ -129,6 +119,41 @@ namespace Entitities
         public T Update(ObjectId objectId, T entity)
         {
             return collection.FindOneAndReplace($"{{ _id: ObjectId('{objectId}') }}", entity);
+        }
+
+        /// <summary>
+        ///    Loads the database. 
+        ///    Uses the connection string values from the appsetting.json
+        ///    Created By - Manendra Ranathunga/ Shehan Wilfred
+        ///    Created Date - 18.06.2021
+        /// </summary>
+        private void GetDatabase()
+        {
+            var client = new MongoClient(AppSettings.GetSettingValue("ConnectionStrings", "MongoDb"));
+            database = client.GetDatabase(AppSettings.GetSettingValue("ConnectionStrings", "DatabaseName"));
+            collection = database.GetCollection<T>(typeof(T).Name);
+        }
+
+        /// <summary>
+        ///    Sets the shard keys to the collection.
+        ///    <param>
+        ///    keys (BsonDocument) - Bson document containing shard keys. 
+        ///    </param>
+        ///    Created By - Manendra Ranathunga
+        ///    Created Date - 20.06.2021
+        /// </summary>
+        public void setShardKey(BsonDocument keys)
+        {
+            var databaseName = database.DatabaseNamespace.DatabaseName;
+
+            BsonDocument bson = new BsonDocument
+            {
+                { "shardCollection", databaseName + "." + collection.CollectionNamespace.CollectionName },
+            };
+            bson.Add("key", keys);
+
+            var shellCommand = new BsonDocumentCommand<BsonDocument>(bson);
+            database.RunCommandAsync<BsonDocument>(shellCommand);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Entitities.Models;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 
 namespace Entitities
 {
@@ -7,6 +8,8 @@ namespace Entitities
     ///    DB context class that initializes the entities.
     ///    Created By - Manendra Ranathunga
     ///    Created Date - 13.06.2021
+    ///    Updated By - Manendra Ranathunga
+    ///    Updated Date - 20.06.2021
     /// </summary>
     public class DBContext
     {
@@ -26,6 +29,8 @@ namespace Entitities
             {
                 //initialize the models here.
                 car = new AbstractContext<Car>();
+                //add shard key if exist by adding elements to the BsonDocument. 
+                car.setShardKey(new BsonDocument().Add("Id", 1));
 
                 //sets the current instance of the DB to a static variable.
                 Context = this;
