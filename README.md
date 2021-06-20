@@ -90,7 +90,7 @@ if(context == null)
 For multiple shard keys
 
 ```
-car.setShardKey(new BsonDocument().Add("Model", 1));
+car.setShardKey(new BsonDocument().Add("Id", 1).Add("Model", 1));
 ```
 
 #### Calling the entitis from your controller
