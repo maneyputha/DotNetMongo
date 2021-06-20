@@ -76,15 +76,15 @@ For a single shard key
 
 ```
 if(context == null)
-            {
-                //initialize the models here.
-                car = new AbstractContext<Car>();
-                //add shard key if exist by adding elements to the BsonDocument. 
-                car.setShardKey(new BsonDocument().Add("Id", 1));
+{
+    //initialize the models here.
+    car = new AbstractContext<Car>();
+    //add shard key if exist by adding elements to the BsonDocument. 
+    car.setShardKey(new BsonDocument().Add("Id", 1));
 
-                //sets the current instance of the DB to a static variable.
-                Context = this;
-            }
+    //sets the current instance of the DB to a static variable.
+    Context = this;
+}
 ```
 
 For multiple shard keys
