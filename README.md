@@ -93,6 +93,7 @@ For multiple shard keys
 car.SetShardKey(new BsonDocument().Add("Id", 1).Add("Model", 1));
 ```
 However sharding is not allowed in free and shared tier of the MongoDB.
+
 #### Calling the entitis from your controller
 
 Let us consider the we have the following entity car :
