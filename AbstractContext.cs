@@ -98,7 +98,7 @@ namespace Entitities
         ///    Created By - Manendra Ranathunga
         ///    Created Date - 18.06.2021
         /// </summary>
-        public IEnumerable<T> Get()
+        public IEnumerable<T> GetAll()
         {
             return collection.Find(_ => true).ToList();
         }
@@ -142,18 +142,20 @@ namespace Entitities
         ///    Created By - Manendra Ranathunga
         ///    Created Date - 20.06.2021
         /// </summary>
-        public void setShardKey(BsonDocument keys)
+        public void SetShardKey(BsonDocument keys)
         {
-            var databaseName = database.DatabaseNamespace.DatabaseName;
+            database.RunCommand<BsonDocument>(new BsonDocument() {
+                { "enableSharding",$"{database.DatabaseNamespace.DatabaseName}" }
+            });
 
-            BsonDocument bson = new BsonDocument
-            {
-                { "shardCollection", databaseName + "." + collection.CollectionNamespace.CollectionName },
-            };
+            BsonDocument bson = new BsonDocument();
+            bson.Add("shardCollection", database.DatabaseNamespace.DatabaseName + "." 
+                + collection.CollectionNamespace.CollectionName);
             bson.Add("key", keys);
 
+
             var shellCommand = new BsonDocumentCommand<BsonDocument>(bson);
-            database.RunCommandAsync<BsonDocument>(shellCommand);
+            database.RunCommand(shellCommand);
         }
     }
 }

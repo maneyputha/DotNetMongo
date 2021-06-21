@@ -21,7 +21,7 @@ namespace Entitities.Interfaces
         Object Create(Object entity);
         // Read
         T Get(ObjectId objectId);
-        IEnumerable<T> Get();
+        IEnumerable<T> GetAll();
         // Update
         T Update(ObjectId objectId, T entity);
         // Delete

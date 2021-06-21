@@ -30,7 +30,8 @@ namespace Entitities
                 //initialize the models here.
                 car = new AbstractContext<Car>();
                 //add shard key if exist by adding elements to the BsonDocument. 
-                car.setShardKey(new BsonDocument().Add("Id", 1));
+                //not allowed in free and shared tier
+                car.SetShardKey(new BsonDocument().Add("Id", 1).Add("Model", 1));
 
                 //sets the current instance of the DB to a static variable.
                 Context = this;
